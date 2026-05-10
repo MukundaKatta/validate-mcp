@@ -1,0 +1,59 @@
+{
+  "name": "@mukundakatta/validate-mcp",
+  "version": "0.1.1",
+  "mcpName": "io.github.MukundaKatta/validate",
+  "description": "MCP server: validate JSON against a JSON Schema (draft-07) with detailed error paths.",
+  "type": "module",
+  "bin": {
+    "mcp-validate": "dist/server.js"
+  },
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "tsx src/server.ts",
+    "test": "node --test --import tsx test/*.test.ts",
+    "lint": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "claude",
+    "cursor",
+    "cline",
+    "windsurf",
+    "zed",
+    "json-schema",
+    "validate",
+    "validation"
+  ],
+  "author": "Mukunda Katta <mukunda.vjcs6@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/MukundaKatta/validate-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/MukundaKatta/validate-mcp/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MukundaKatta/validate-mcp.git"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "ajv": "^8.17.0",
+    "ajv-formats": "^3.0.1"
+  },
+  "devDependencies": {
+    "tsx": "^4.7.0",
+    "typescript": "^5.4.0",
+    "@types/node": "^20.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ]
+}

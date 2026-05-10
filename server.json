@@ -1,0 +1,21 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.MukundaKatta/validate",
+  "description": "MCP server: validate JSON against a JSON Schema (draft-07) with detailed error paths.",
+  "version": "0.1.1",
+  "repository": {
+    "url": "https://github.com/MukundaKatta/validate-mcp",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/MukundaKatta/validate-mcp",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@mukundakatta/validate-mcp",
+      "version": "0.1.1",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}
