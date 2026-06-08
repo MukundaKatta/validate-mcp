@@ -73,3 +73,31 @@ test('arrays validate', () => {
   assert.equal(validate(schema, [1]).valid, false);
   assert.equal(validate(schema, [1, 'two']).valid, false);
 });
+
+test('supports draft 2020-12 schemas', () => {
+  const schema = {
+    $schema: 'https://json-schema.org/draft/2020-12/schema',
+    type: 'object',
+    properties: { name: { type: 'string' } },
+    required: ['name'],
+  };
+  assert.equal(validate(schema, { name: 'x' }).valid, true);
+  const bad = validate(schema, {});
+  assert.equal(bad.valid, false);
+  assert.ok(bad.errors.some((e) => e.keyword === 'required'));
+});
+
+test('supports draft 2019-09 schemas', () => {
+  const schema = {
+    $schema: 'https://json-schema.org/draft/2019-09/schema',
+    type: 'object',
+    properties: { age: { type: 'integer' } },
+  };
+  assert.equal(validate(schema, { age: 30 }).valid, true);
+  assert.equal(validate(schema, { age: 'old' }).valid, false);
+});
+
+test('uses draft-07 by default when $schema is absent', () => {
+  assert.equal(validate({ type: 'string' }, 'hi').valid, true);
+  assert.equal(validate({ type: 'string' }, 42).valid, false);
+});

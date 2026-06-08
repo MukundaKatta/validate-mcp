@@ -29,7 +29,7 @@ path so the model can fix the offending field.
 {
   "valid": false,
   "errors": [
-    { "path": "",     "keyword": "required", "message": "must have required property 'name'", "schema_path": "#/required" },
+    { "path": "/",    "keyword": "required", "message": "must have required property 'name'", "schema_path": "#/required" },
     { "path": "/age", "keyword": "type",     "message": "must be integer",                     "schema_path": "#/properties/age/type" }
   ]
 }

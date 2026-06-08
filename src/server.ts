@@ -14,9 +14,11 @@ import {
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
 import Ajv, { type ErrorObject } from 'ajv';
+import Ajv2019 from 'ajv/dist/2019.js';
+import Ajv2020 from 'ajv/dist/2020.js';
 import addFormats from 'ajv-formats';
 
-const VERSION = '0.1.0';
+const VERSION = '0.1.1';
 
 export interface ValidationError {
   path: string;
@@ -30,15 +32,37 @@ export interface ValidationResult {
   errors: ValidationError[];
 }
 
-const ajv = new Ajv({ allErrors: true, strict: false });
-addFormats(ajv);
+const ajvOptions = { allErrors: true, strict: false } as const;
+
+// One Ajv instance per supported dialect. The default (draft-07) instance also
+// handles schemas with no `$schema` declared.
+const ajvDraft07 = new Ajv(ajvOptions);
+const ajv2019 = new Ajv2019(ajvOptions);
+const ajv2020 = new Ajv2020(ajvOptions);
+for (const instance of [ajvDraft07, ajv2019, ajv2020]) addFormats(instance);
+
+/**
+ * Pick the Ajv instance whose dialect matches the schema's `$schema`.
+ * Falls back to draft-07 when `$schema` is absent or unrecognized.
+ */
+function ajvFor(schema: unknown): Ajv {
+  const dialect =
+    schema && typeof schema === 'object'
+      ? (schema as { $schema?: unknown }).$schema
+      : undefined;
+  if (typeof dialect === 'string') {
+    if (dialect.includes('2020-12')) return ajv2020;
+    if (dialect.includes('2019-09')) return ajv2019;
+  }
+  return ajvDraft07;
+}
 
 /**
  * Validate `data` against `schema` (a parsed JSON Schema object).
  * Compiles the schema fresh each call — caching is the caller's job.
  */
 export function validate(schema: unknown, data: unknown): ValidationResult {
-  const validator = ajv.compile(schema as object);
+  const validator = ajvFor(schema).compile(schema as object);
   const ok = validator(data);
   if (ok) return { valid: true, errors: [] };
   const errs = (validator.errors ?? []).map((e: ErrorObject) => ({
